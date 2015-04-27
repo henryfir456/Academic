@@ -26,15 +26,17 @@ select NEWID() ClassID, a.DayfgID, a.ClassTypeID, a.UnitID
 	, NULL ClassType
 	, NULL Dayfg, NULL StudyGroup, NULL Class, NULL IsExct, NULL ClassIDOld
 	, NULL IsExistStd, NULL ClassUniqueNo
-from (select distinct b.DayfgID, b.ClassTypeID, b.UnitID, b.ClassNo 
-from tUnitClassType a
-join tClass b on a.DayfgID = b.DayfgID
-	and a.ClassTypeID = b.ClassTypeID
-	and a.UnitID = b.UnitID
-where b.DayfgID in (
-	select DayfgID from tDayfg
-	where DayfgName in ('進修學院', '進專部')
-)) a
+from (
+	select distinct b.DayfgID, b.ClassTypeID, b.UnitID, b.ClassNo 
+	from tUnitClassType a
+	join tClass b on a.DayfgID = b.DayfgID
+		and a.ClassTypeID = b.ClassTypeID
+		and a.UnitID = b.UnitID
+	where b.DayfgID in (
+		select DayfgID from tDayfg
+		where DayfgName in ('進修學院', '進專部')
+	)
+) a
 --年級表
 , (
 	select distinct number Grade
