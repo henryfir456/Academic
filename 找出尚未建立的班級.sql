@@ -1,5 +1,31 @@
 --找出尚未建立的班級
-select * 
+select NEWID() ClassID, a.DayfgID, a.ClassTypeID, a.UnitID
+	, '00000000-0000-0000-0000-000000000000' StudyGroupID, NULL
+	, (select top 1 SUBSTRING(d.ClassName, 1, LEN(d.ClassName) - 2) + b.GradeName + RIGHT(d.ClassName, 1)
+		from tClass d
+		where a.DayfgID = d.DayfgID
+			and a.ClassTypeID = d.ClassTypeID
+			and a.UnitID = d.UnitID
+			and a.ClassNo = d.ClassNo) ClassName
+	, (select top 1 SUBSTRING(d.ClassName, 1, LEN(d.ClassName) - 2) + b.GradeName + RIGHT(d.ClassName, 1)
+		from tClass d
+		where a.DayfgID = d.DayfgID
+			and a.ClassTypeID = d.ClassTypeID
+			and a.UnitID = d.UnitID
+			and a.ClassNo = d.ClassNo) ClassAlias
+	, NULL ClassENGName
+	, 1 state
+	, b.Grade
+	, (select top 1 d.ClassNo
+		from tClass d
+		where a.DayfgID = d.DayfgID
+			and a.ClassTypeID = d.ClassTypeID
+			and a.UnitID = d.UnitID
+			and a.ClassNo = d.ClassNo) ClassNo
+	, NULL UnitCode
+	, NULL ClassType
+	, NULL Dayfg, NULL StudyGroup, NULL Class, NULL IsExct, NULL ClassIDOld
+	, NULL IsExistStd, NULL ClassUniqueNo
 from (select distinct b.DayfgID, b.ClassTypeID, b.UnitID, b.ClassNo 
 from tUnitClassType a
 join tClass b on a.DayfgID = b.DayfgID
